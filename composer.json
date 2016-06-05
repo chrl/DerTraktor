@@ -1,0 +1,22 @@
+{
+  "name": "Adombrovsky/ImageProcessorBot",
+  "description": "Bot can easily download any images via command line",
+  "minimum-stability": "dev",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "adombrovsky",
+      "email": "dombrovsky.alex@gmail.com"
+    }
+  ],
+  "require": {
+    "symfony/console": "*",
+    "chrisboulton/php-resque": "1.2.x",
+    "guzzle/guzzle": "v3.8.1"
+  },
+  "autoload": {
+    "psr-0": {
+      "": "src/"
+    }
+  }
+}
