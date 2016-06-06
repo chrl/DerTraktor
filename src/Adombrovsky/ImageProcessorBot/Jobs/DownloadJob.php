@@ -8,7 +8,6 @@
 
 namespace Adombrovsky\ImageProcessorBot\Jobs;
 
-
 use Guzzle\Http\Client;
 
 class DownloadJob
@@ -37,16 +36,11 @@ class DownloadJob
         $request = $client->get($url);
         $response = $request->send();
 
-        if (!is_dir($path) || !is_writable($path))
-        {
+        if (!is_dir($path) || !is_writable($path)) {
             throw  new \Exception('Unable to write file to dir: '.$path);
         }
 
-        file_put_contents($path.'/'.uniqid(),$response->getBody());
-
-
+        file_put_contents($path.'/'.uniqid(), $response->getBody());
 
     }
-
-
 }

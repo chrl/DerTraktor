@@ -30,32 +30,26 @@ class DownloaderCommand extends Command
         $path = $input->getArgument('path');
 
         $jobs = \Resque::size(DownloadJob::READY_QUEUE);
-        while ($jobs > 0)
-        {
+        while ($jobs > 0) {
             $jobInfo = \Resque::pop(DownloadJob::READY_QUEUE);
 
-            if (isset($jobInfo['class']) && isset($jobInfo['args']))
-            {
+            if (isset($jobInfo['class']) && isset($jobInfo['args'])) {
+
                 /** @var DownloadJob $job */
                 $job = new $jobInfo['class']($jobInfo['args'][0]);
-                try
-                {
+
+                try {
                     $job->perform($path);
                     Resque::enqueue(DownloadJob::DONE_QUEUE, DownloadJob::class, $jobInfo['args'][0], true);
-                }
-                catch (\Exception $e)
-                {
+                } catch (\Exception $e) {
                     $output->writeln($e->getMessage());
                     $id = Resque::enqueue(DownloadJob::FAILED_QUEUE, DownloadJob::class, $jobInfo['args'][0], true);
 
                     $output->writeln('Job with ID: '. $jobInfo['id']. 'added to FAILED queue. New ID:'.$id);
                 }
-
             }
 
             $jobs--;
         }
     }
-
-
 }

@@ -30,20 +30,17 @@ class SchedulerCommand extends Command
     {
         $filePath = $input->getArgument('file');
 
-        if (!file_exists($filePath))
-        {
-            throw new \RuntimeException(sprintf('File not found: %s',$filePath));
+        if (!file_exists($filePath)) {
+            throw new \RuntimeException(sprintf('File not found: %s', $filePath));
         }
 
-        $images = file($input->getArgument('file'),FILE_IGNORE_NEW_LINES);
+        $images = file($input->getArgument('file'), FILE_IGNORE_NEW_LINES);
 
-        if (!is_array($images))
-        {
+        if (!is_array($images)) {
             throw new \RuntimeException('Incorrect file structure.');
         }
 
-        foreach ($images as $image)
-        {
+        foreach ($images as $image) {
             if (filter_var($image, FILTER_VALIDATE_URL) === false) {
                 $id = Resque::enqueue(DownloadJob::FAILED_QUEUE, DownloadJob::class, ['url'=>$image], true);
             } else {
